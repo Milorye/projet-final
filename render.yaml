@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: maison-moya-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGIN
+        value: https://your-frontend-url.com
+      - key: FRONTEND_URL
+        value: https://your-frontend-url.com
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: ADMIN_EMAIL
+        value: admin@maisonmoya.com
+      - key: ADMIN_PASSWORD
+        value: Admin123!
+      - key: DEFAULT_CURRENCY
+        value: EUR
