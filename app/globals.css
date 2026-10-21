@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F8F6F1;
+  --foreground: #22211F;
+
+  --color-ivory: #F8F6F1;
+  --color-white: #FFFFFF;
+  --color-black: #22211F;
+  --color-charcoal: #35322F;
+  --color-taupe: #A89B8B;
+  --color-sand: #DCD1C3;
+  --color-gold: #A58A5C;
+  --color-gold-hover: #8F7449;
+  --color-border-light: #E8E3DC;
+  --color-border-subtle: #F0ECE4;
+  --color-surface-hover: #F2EFE8;
+}
+
+@theme inline {
+  --color-ivory: var(--color-ivory);
+  --color-white: var(--color-white);
+  --color-black: var(--color-black);
+  --color-charcoal: var(--color-charcoal);
+  --color-taupe: var(--color-taupe);
+  --color-sand: var(--color-sand);
+  --color-gold: var(--color-gold);
+  --color-gold-hover: var(--color-gold-hover);
+  --color-border-light: var(--color-border-light);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-surface-hover: var(--color-surface-hover);
+
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  color-scheme: light;
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(220, 209, 195, 0.35), transparent 30%),
+    linear-gradient(180deg, #f8f6f1 0%, #f7f3ee 100%);
+  color: var(--foreground);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
+  min-height: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+main {
+  overflow: hidden;
+}
+
+@media (max-width: 375px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* Elegant custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8F6F1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DCD1C3;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A89B8B;
+}
+
+/* Accessible focus outline */
+*:focus-visible {
+  outline: 2px solid #A58A5C;
+  outline-offset: 2px;
+}
+
+.font-editorial {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hide scrollbar for clean carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
