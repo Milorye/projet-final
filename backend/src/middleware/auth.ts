@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from 'express';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
-import User from '../models/User.js';
+import User, { type UserDocument } from '../models/User.js';
 import { env } from '../config/env.js';
 
 export interface AuthenticatedRequest extends Request {
-  user?: Awaited<ReturnType<typeof User.findById>>;
+  user?: UserDocument | null;
 }
 
 export async function authenticate(req: AuthenticatedRequest, res: Response, next: NextFunction) {

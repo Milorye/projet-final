@@ -8,6 +8,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/src/server.js",
     "test": "vitest run",
+    "check:db": "tsx src/scripts/checkMongoConnection.ts",
     "seed:admin": "tsx src/scripts/createAdmin.ts",
     "seed:products": "tsx src/scripts/seedProducts.ts"
   },
@@ -33,7 +34,6 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^22.10.1",
     "@types/supertest": "^6.0.0",
-    "mongodb-memory-server": "^10.0.0",
     "supertest": "^7.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",

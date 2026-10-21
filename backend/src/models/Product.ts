@@ -18,7 +18,6 @@ export interface IProduct extends Document {
   availableColors?: { name: string; hex: string }[];
   tags: string[];
   featured?: boolean;
-  isNew?: boolean;
   isBestseller?: boolean;
   material?: string;
   careInstructions?: string[];
@@ -62,7 +61,6 @@ const productSchema = new Schema<IProduct>(
     ],
     tags: [{ type: String }],
     featured: { type: Boolean, default: false },
-    isNew: { type: Boolean, default: false },
     isBestseller: { type: Boolean, default: false },
     material: { type: String },
     careInstructions: [{ type: String }],

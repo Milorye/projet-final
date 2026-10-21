@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { type SignOptions } from 'jsonwebtoken';
 import { z } from 'zod';
 import User from '../models/User.js';
 import { env } from '../config/env.js';
@@ -18,11 +18,13 @@ const loginSchema = z.object({
 });
 
 function getAuthToken(userId: string, role: string) {
-  return jwt.sign({ sub: userId, role }, env.jwtSecret, { expiresIn: env.jwtExpiresIn });
+  const signOptions: SignOptions = { expiresIn: env.jwtExpiresIn as SignOptions['expiresIn'] };
+  return jwt.sign({ sub: userId, role }, env.jwtSecret as jwt.Secret, signOptions);
 }
 
 function getRefreshToken(userId: string) {
-  return jwt.sign({ sub: userId, type: 'refresh' }, env.jwtRefreshSecret, { expiresIn: env.jwtRefreshExpiresIn });
+  const signOptions: SignOptions = { expiresIn: env.jwtRefreshExpiresIn as SignOptions['expiresIn'] };
+  return jwt.sign({ sub: userId, type: 'refresh' }, env.jwtRefreshSecret as jwt.Secret, signOptions);
 }
 
 export async function register(req: Request, res: Response) {

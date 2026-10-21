@@ -56,16 +56,16 @@ export async function listProducts(req: Request, res: Response) {
       query.price = { ...((query.price as Record<string, number>) ?? {}), $lte: Number(maxPrice) };
     }
 
-    const sortOptions: Record<string, 1 | -1> = {
+    const sortOptions: Record<string, Record<string, 1 | -1>> = {
       pertinence: { createdAt: -1 },
       'prix-asc': { price: 1 },
       'prix-desc': { price: -1 },
       nouveautes: { createdAt: -1 },
-    } as Record<string, Record<string, 1 | -1>>;
+    };
 
     const selectedSort = sortOptions[String(sort) ?? 'pertinence'] ?? sortOptions.pertinence;
     const [products, total] = await Promise.all([
-      Product.find(query).sort(selectedSort).lean(),
+      Product.find(query).sort(selectedSort as Record<string, 1 | -1>).lean(),
       Product.countDocuments(query),
     ]);
 

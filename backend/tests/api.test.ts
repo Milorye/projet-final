@@ -1,37 +1,32 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import request from 'supertest';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import app from '../src/app.js';
+import User from '../src/models/User.js';
+import Product from '../src/models/Product.js';
 
-let app: any;
-let mongoServer: MongoMemoryServer;
+vi.mock('../src/models/User.js', () => ({
+  default: {
+    findOne: vi.fn(),
+    create: vi.fn(),
+    findById: vi.fn(),
+  },
+}));
 
-beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  process.env.MONGODB_URI = mongoServer.getUri();
-  process.env.JWT_SECRET = 'test-secret';
-  process.env.JWT_REFRESH_SECRET = 'test-refresh-secret';
-
-  const appModule = await import('../src/app.js');
-  app = appModule.default;
-
-  const { connectDatabase } = await import('../src/config/db.js');
-  await connectDatabase();
-});
-
-beforeEach(async () => {
-  const { default: User } = await import('../src/models/User.js');
-  const { default: Product } = await import('../src/models/Product.js');
-  await User.deleteMany({});
-  await Product.deleteMany({});
-});
-
-afterAll(async () => {
-  const { disconnectDatabase } = await import('../src/config/db.js');
-  await disconnectDatabase();
-  await mongoServer.stop();
-});
+vi.mock('../src/models/Product.js', () => ({
+  default: {
+    find: vi.fn(),
+    countDocuments: vi.fn(),
+    findById: vi.fn(),
+    findOne: vi.fn(),
+    create: vi.fn(),
+  },
+}));
 
 describe('MAISON MOYA backend API', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('returns the health status', async () => {
     const response = await request(app).get('/api/health');
 
@@ -40,6 +35,14 @@ describe('MAISON MOYA backend API', () => {
   });
 
   it('registers a new user and returns a token', async () => {
+    vi.mocked(User.findOne).mockResolvedValue(null);
+    vi.mocked(User.create).mockResolvedValue({
+      _id: 'user_1',
+      name: 'Alice Dupont',
+      email: 'alice@example.com',
+      role: 'customer',
+    } as any);
+
     const response = await request(app).post('/api/auth/register').send({
       name: 'Alice Dupont',
       email: 'alice@example.com',
@@ -52,20 +55,19 @@ describe('MAISON MOYA backend API', () => {
   });
 
   it('lists products and returns the catalog', async () => {
-    const { default: Product } = await import('../src/models/Product.js');
-    await Product.create({
-      slug: 'test-product',
-      name: 'Produit de test',
-      shortDescription: 'Description courte de test',
-      description: 'Description complète de test du produit.',
-      price: 320,
-      category: 'vetements',
-      categoryLabel: 'Vêtements',
-      collectionSlugs: ['intemporels'],
-      images: [{ url: 'https://example.com/image.jpg', alt: 'Produit de test' }],
-      tags: ['test'],
-      reference: 'TEST-001',
-    });
+    vi.mocked(Product.find).mockReturnValue({
+      sort: vi.fn().mockReturnValue({
+        lean: vi.fn().mockResolvedValue([
+          {
+            _id: 'product_1',
+            name: 'Produit de test',
+            price: 320,
+            category: 'vetements',
+          },
+        ]),
+      }),
+    } as any);
+    vi.mocked(Product.countDocuments).mockResolvedValue(1);
 
     const response = await request(app).get('/api/products');
 
